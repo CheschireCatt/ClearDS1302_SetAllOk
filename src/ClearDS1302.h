@@ -80,7 +80,7 @@ class ClearDS1302 {
             public:
                 void write(byte address, byte value);
                 byte read(byte address);
-                void WriteClockBurst(byte dataSecond, byte dataMinute, byte dataHour, byte dataDay, byte dataMonth, byte dataYear, byte dataDate, byte dataControlRegister);
+                void WriteClockBurst(byte second, byte minute, byte hour, byte date, byte month, byte day, byte year, byte ClockRegister);
                 byte* ReadClockBurst();
         };raw raw;
 };
