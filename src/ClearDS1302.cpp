@@ -1,5 +1,6 @@
+// corrected SetAll to have the good order for RTCwriteBurst and made RTCwriteBurst in the right order for burst (Create burst raw write is ok now)
 // TODO: [NOTE: if you done the thing, place "+"]
-// Create burst raw write
+// Create burst raw write +
 // Create burst raw read
 // Create burst cooked write
 // create burst cooked read
@@ -75,17 +76,17 @@ byte RTCread(byte address) {
   return result;
 }
 
-void RTCwriteBurst(byte second, byte minute, byte hour, byte day, byte month, byte year, byte date, byte ClockRegister) {
+void RTCwriteBurst(byte second, byte minute, byte hour, byte date, byte month, byte day, byte year, byte ClockRegister) {
     byte address = 0xBE;
     
     byte value[8] = {
         second,
         minute,
         hour,
-        day,
-        month,
-        year,
         date,
+        month,
+		day,
+        year,
         ClockRegister
     };
 
@@ -165,8 +166,8 @@ void ClearDS1302::raw::write(byte address, byte data) {
     RTCwrite(address, data);
 }
 
-void ClearDS1302::raw::WriteClockBurst(byte second, byte minutes, byte hour, byte day, byte month, byte year, byte date, byte ClockRegister) {
-    RTCwriteBurst(second, minutes, hour, day, month, year, date, ClockRegister);
+void ClearDS1302::raw::WriteClockBurst(byte second, byte minute, byte hour, byte date, byte month, byte day, byte year, byte ClockRegister) {
+    RTCwriteBurst(second, minute, hour, date, month, day, year, ClockRegister);
 }
 
 byte ClearDS1302::raw::read(byte address) {
@@ -263,7 +264,7 @@ void ClearDS1302::set::time::SetAll(int second, int minute, int hour, int day, i
     byte sendYear = BitToBCD(year);
     byte sendClockRegister = (WriteProtect ? 0x80 : 0x00);
 
-    RTCwriteBurst(sendSecond, sendMinute, sendHour, sendDay, sendDate, sendMonth, sendYear, sendClockRegister);
+    RTCwriteBurst(sendSecond, sendMinute, sendHour, sendDate, sendMonth, sendDay, sendYear,  sendClockRegister);
 }
 
 void ClearDS1302::set::HourFormat(bool isHourFormat12Pm) {
